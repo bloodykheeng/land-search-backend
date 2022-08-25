@@ -28,12 +28,7 @@ res.json({
         status:"FAILED",
         message:"invalid lastname"
     })
-    }else if(!/^[a-zA-Z]*$/.test(userName)){
-        res.json({
-            status:"FAILED",
-            message:"invalid username"
-        })
-        }else if(!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
+    }else if(!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
             res.json({
                 status:"FAILED",
                 message:"invalid email"

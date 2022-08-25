@@ -22,6 +22,7 @@ const verifyjwt = (req,res,next)=>{
                 })
             }else{
                 req.userid = decoded.id;
+                console.log(req.userid);
                 next();
             }
         })

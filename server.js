@@ -5,10 +5,7 @@ const cors = require("cors")
 const bodyparser = require("body-parser");
 const cookieparser = require("cookie-parser");
 const fileupload = require("express-fileupload");
-const path = require("path");
 
-
-const dbcon = require("./connection");
 const Router = require("./router");
 
 app.use(cors({
@@ -25,5 +22,5 @@ app.use("/",Router);
 
 
 app.listen(port,()=>{
-    console.log(`server started om port : ${port}`);
+    console.log(`server started on port : ${port}`);
 })
