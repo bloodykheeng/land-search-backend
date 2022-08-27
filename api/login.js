@@ -50,12 +50,18 @@ exports.login = (req,res)=>{
                         time += 3600 * 1000;
                         now.setTime(time);
 
-                         const id = data[0].adminId;
-                         const token = jwt.sign({id},jwtsecret,{expiresIn:'1h'});
-                         res.cookie("token",token,
+                         //const id = data[0].adminId;
+                         const admindata = {
+                            id : data[0].adminId,
+                            firstName : data[0].firstName,
+                            lastName :  data[0].lastName,
+                            userName :  data[0].username
+                         };
+                         const token = jwt.sign(admindata,jwtsecret,{expiresIn:'1h'});
+                         res.cookie("cookie-token",token,
                          {
                         httpOnly:true,
-                        maxAge:1000000
+                        maxAge:60*60*1000
                         });
                         res.json({
                                     status:"SUCESSFULL",

@@ -4,12 +4,12 @@ const { application } = require("express");
 const jwtsecret = "myjwtsecret";
 
 const verifyjwt = (req,res,next)=>{
-    const token = req.headers["token"];
-
+    const token = req.cookies["cookie-token"];
+   
     if(!token){
         res.json({
             status:"Failed",
-            message:"you have no token",
+            message:"you have no cookie token",
             auth:false
         })
     }else{
@@ -20,11 +20,13 @@ const verifyjwt = (req,res,next)=>{
                     message:"wrong token",
                     auth:false
                 })
+               
             }else{
-                req.userid = decoded.id;
-                console.log(req.userid);
+                req.admindata = decoded;
                 next();
             }
         })
     }
 }
+
+module.exports = verifyjwt;
