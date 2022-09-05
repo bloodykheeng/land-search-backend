@@ -8,7 +8,7 @@ const verifyjwt = (req,res,next)=>{
    
     if(!token){
         res.json({
-            status:"Failed",
+            status:"cookie-failed",
             message:"you have no cookie token",
             auth:false
         })
@@ -16,7 +16,7 @@ const verifyjwt = (req,res,next)=>{
         jwt.verify(token,jwtsecret,(err,decoded)=>{
             if(err){
                 res.json({
-                    status:"failed",
+                    status:"token-failed",
                     message:"wrong token",
                     auth:false
                 })
