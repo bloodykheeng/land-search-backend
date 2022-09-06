@@ -22,7 +22,22 @@ const rptownertable = (
 )=>{
     let feedback;
     return  new Promise((resolve,reject)=>{
-     
+        query = "select * from rptowner where Global_Id = ?"; 
+        dbcon.query(query,[Global_Id],(err,result)=>{
+            if(err){
+                feedback = {
+                    status:"failed",
+                    err:err
+                }
+                reject(feedback);
+            }else if(result.length > 0){
+                feedback = {
+                    status:"failed",
+                    err:`duplicate entry in rptowner table globalid ${Global_Id}`
+                }
+                reject(feedback);
+            }else if(result.length === 0){
+
                 query = "insert into rptowner (Land_Search_RptOwner_Id,Parent_Global_Id, Object_Id, Global_Id, Surname, GivenName, OtherNames,	 Gender_Id,	 Date_Of_Birth,	 Marital_Status_Id,	 Address,	 TelNumber,	 Email,	 Id_Nin_Number,	 CreationDate,	 Creator_Id, EditDate,	Editor_Id) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 dbcon.query(query,[
@@ -63,7 +78,11 @@ const rptownertable = (
 
                          resolve(feedback);
                      }
-                 })
+                 })  
+            }
+        })
+
+              
 
             }
     )}

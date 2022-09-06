@@ -8,7 +8,10 @@ const dt = datetime.create();
 const mydate = dt.format("d/m/y H:M:S");
 
 //const uploadfiles = require("./myfunctions/uploadfiles");
+
 const customaryDemacartionTable = require("./myfunctions/insert_into_tables/customaryDemarcartionTable");
+
+const surveySummary = require("./myfunctions/insert_into_tables/surveySummary");
 
 const getfilestableid = require("./myfunctions/getfilestableid");
 const gettableid = require("./myfunctions/gettableid");
@@ -23,9 +26,17 @@ const rptformtable = require("./myfunctions/insert_into_tables/rptformtable");
 
 
 const  handlefiles = async (req,res)=>{
-    let  CLD_response = [],rptowner_1 = [], rptneighbor_2 = [], rptwitness_3 = [], rptinspection_4 = [], rptform1_5 = [];
+    let CLD_response = [], CLD_err = [],
+        summary_response = [], summary_err = [],
+        rptowner_response = [] , rptowner_err = [],
+        rptneighbor_response = [], rptneighbor_err = [],
+        rptwitness_response = [], rptwitness_err = [], 
+        rptinspection_response = [], rptinspection_err = [], 
+        rptform_response = [] , rptform_err = [];
+        wrongworksheetname = [];
 
     console.log("reached handling files ");
+
     const excelfilepath = req.filepaths[0];
     const geodatabasezip_filepath = req.filepaths[1];
     const userId = req.admindata.id;
@@ -38,16 +49,9 @@ const  handlefiles = async (req,res)=>{
 
     const worksheet = workbook.Sheets[worksheetname];
     const data = await xlsx.utils.sheet_to_json(worksheet,{raw:false});
-    
-    console.log(" first loop the worksheetname ",worksheetname);
-    console.log("first loop the data in worksheet ",data);
-    // console.log("worksheetname");
-    // console.log(worksheetname);
 
         if(worksheetname == "Customary_Land_Dermacation__0"){
-            for(let element of data){
-        console.log("started the looping the data");
-        console.log("element ", element); 
+            for(let element of data){ 
             let     Global_Id = element["GlobalID"];
             let     Land_Search_Editor_Id = userId; 
             let     Land_Search_RegDate = mydate;
@@ -117,12 +121,10 @@ const  handlefiles = async (req,res)=>{
             let    Recorders_Name = element["RecordersName"];
             let    regDateAndTime = element["regDateAndTime"];
             let    Land_Search_Registration = mydate;
-
-           console.log(regDateAndTime);
               
+           try{
+
             CLD_response.push( await customaryDemacartionTable(
-                req,
-                res,
                 Global_Id,
                 Land_Search_Editor_Id,
                 Land_Search_RegDate,
@@ -148,41 +150,45 @@ const  handlefiles = async (req,res)=>{
                 Easements_Or_Other_Persons_Rights,
                 Value_Per_Acre,
                 Year_Of_Evaluation,
-                Comments,
-
-                Survey_Summary_Id,
-                Parent_Global_Id,
-                Date_Of_The_Interview,
-                Interviewed_By,
-                Status_Of_Survey_Id,
-                Supervision_Notes,
-                Shape_Area,
-                Shape_Length,
-                CreationDate,
-                Creator_Id,
-                EditDate,
-                Editor_Id,
-                Surveyed_Parish_Id,
-                Instrument_Number,
-                Recorders_Name,
-                regDateAndTime,
-                Land_Search_Registration
+                Comments
                    ));
-       
-    //    res.json({
-    //         status:"SUCCESSFULL",
-    //         message:"customaryDemacartionTable updated succesfully",
-    //    })
+                }catch(err){
+                    CLD_err.push(err);
+                }
 
+               if(!CLD_err.length ){
+                try{
+                    summary_response.push(await surveySummary(
+                        Survey_Summary_Id,
+                        Parent_Global_Id,
+                        Date_Of_The_Interview,
+                        Interviewed_By,
+                        Status_Of_Survey_Id,
+                        Supervision_Notes,
+                        Shape_Area,
+                        Shape_Length,
+                        CreationDate,
+                        Creator_Id,
+                        EditDate,
+                        Editor_Id,
+                        Surveyed_Parish_Id,
+                        Instrument_Number,
+                        Recorders_Name,
+                        regDateAndTime,
+                        Land_Search_Registration
+                        ));
+    
+            }catch(err){
+                summary_err.push(err);
+            }
+               }
        
     }
 
        }else if(worksheetname == "rptowner_1"){
 
-            //colors = element["colors"]
             for(let element of data){
-                console.log("started the looping the data into rpt owner");
-                console.log("element ", element); 
+                 
                 
                     let     Land_Search_RptOwner_Id = uuid.v4();
                     let     Parent_Global_Id = element["ParentGlobalID"]; 
@@ -215,44 +221,39 @@ const  handlefiles = async (req,res)=>{
                     let     EditDate = element["EditDate"]
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
-                      
-                    rptowner_1.push( await rptownertable(
-                        Land_Search_RptOwner_Id,
-                        Parent_Global_Id,
-                        Object_Id,
-                        Global_Id,
-                        Surname,
-                        GivenName,
-                        OtherNames,	
-                        Gender_Id,	
-                        Date_Of_Birth,	
-                        Marital_Status_Id,	
-                        Address,	
-                        TelNumber,	
-                        Email,	
-                        Id_Nin_Number,	
-                        CreationDate,	
-                        Creator_Id,	
-                        EditDate,	
-                        Editor_Id
-                           ));
-               
-            //    res.json({
-            //         status:"SUCCESSFULL",
-            //         message:"customaryDemacartionTable updated succesfully",
-            //    })
-        
+
+                      try{
+                        rptowner_response.push( await rptownertable(
+                            Land_Search_RptOwner_Id,
+                            Parent_Global_Id,
+                            Object_Id,
+                            Global_Id,
+                            Surname,
+                            GivenName,
+                            OtherNames,	
+                            Gender_Id,	
+                            Date_Of_Birth,	
+                            Marital_Status_Id,	
+                            Address,	
+                            TelNumber,	
+                            Email,	
+                            Id_Nin_Number,	
+                            CreationDate,	
+                            Creator_Id,	
+                            EditDate,	
+                            Editor_Id
+                               ));
+                      }catch(err){
+                        rptowner_err.push(err);
+                      }
+
                
             }
 
-            response = "rptowner_1 done";
        }else if(worksheetname == "rptneighbor_2"){
 
-            //colors = element["colors"]
-
             for(let element of data){
-                console.log("started the looping the data into rpt neighbour");
-                console.log("element ", element); 
+              
                 
                     let     Land_Search_RptNeighbour_Id = uuid.v4();
                     let     Parent_Global_Id = element["ParentGlobalID"]; 
@@ -271,34 +272,31 @@ const  handlefiles = async (req,res)=>{
                     let     EditDate = element["EditDate"]
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
-                      
-                    rptneighbor_2.push( await rptneighbortable(
-                        Land_Search_RptNeighbour_Id,
-                        Parent_Global_Id,
-                        Object_Id,
-                        Global_Id,
-                        Name_Of_Adjacent_Owner,
-                        CreationDate,
-                        Creator_Id,	
-                        EditDate,
-                        Editor_Id
-                           ));
-               
-            //    res.json({
-            //         status:"SUCCESSFULL",
-            //         message:"customaryDemacartionTable updated succesfully",
-            //    })
+
+                      try{
+                        rptneighbor_response.push( await rptneighbortable(
+                            Land_Search_RptNeighbour_Id,
+                            Parent_Global_Id,
+                            Object_Id,
+                            Global_Id,
+                            Name_Of_Adjacent_Owner,
+                            CreationDate,
+                            Creator_Id,	
+                            EditDate,
+                            Editor_Id
+                               ));
+                      }catch(err){
+                        rptneighbor_err.push(err);
+                      }
+                    
         
                
             }
-            response = "rptneighbor_2";
+           
         }else if(worksheetname == "rptwitness_3"){
-            //colors = element["colors"]
 
             for(let element of data){
-                console.log("started the looping the data into rptwitness_3");
-                console.log("element ", element); 
-                
+               
                     let     Land_Search_Rptwitness_Id = uuid.v4();
                     let     Parent_Global_Id = element["ParentGlobalID"]; 
                     let     Object_Id = element["ObjectID"];
@@ -317,33 +315,29 @@ const  handlefiles = async (req,res)=>{
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
                       
-                    rptwitness_3.push( await rptwitnesstable(
-                        Land_Search_Rptwitness_Id,
-                        Parent_Global_Id,	
-                        Object_Id,	
-                        Global_Id,	
-                        Name_Of_The_Witness,	
-                        CreationDate,	
-                        Creator_Id,	
-                        EditDate,	
-                        Editor_Id
-                           ));
-               
-            //    res.json({
-            //         status:"SUCCESSFULL",
-            //         message:"customaryDemacartionTable updated succesfully",
-            //    })
+                    try{
+                        rptwitness_response.push( await rptwitnesstable(
+                            Land_Search_Rptwitness_Id,
+                            Parent_Global_Id,	
+                            Object_Id,	
+                            Global_Id,	
+                            Name_Of_The_Witness,	
+                            CreationDate,	
+                            Creator_Id,	
+                            EditDate,	
+                            Editor_Id
+                               ));
+                    }catch(err){
+                        rptwitness_err.push(err);
+                      }
         
                
             }
 
-            response = "rptwitness_3";
        }else if(worksheetname == "rptinspection_4"){
-         //colors = element["colors"]
-         //rptform1_5
+       
          for(let element of data){
-            console.log("started the looping the data into rptinspection_4");
-            console.log("element ", element); 
+           
             
                 let     Land_Search_Rptinspection_Id = uuid.v4();
                 let     Parent_Global_Id = element["ParentGlobalID"]; 
@@ -360,33 +354,29 @@ const  handlefiles = async (req,res)=>{
                 let     EditDate = element["EditDate"]
 
                 let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
-                  
-                rptinspection_4.push( await rptinspectiontable(
-                    Land_Search_Rptinspection_Id,	
-                    Parent_Global_Id,
-                    Object_Id,
-                    Global_Id,	
-                    CreationDate,	
-                    Creator_Id,	
-                    EditDate,	
-                    Editor_Id
-                       ));
-           
-        //    res.json({
-        //         status:"SUCCESSFULL",
-        //         message:"customaryDemacartionTable updated succesfully",
-        //    })
+                
+                try{
+                    rptinspection_response.push( await rptinspectiontable(
+                        Land_Search_Rptinspection_Id,	
+                        Parent_Global_Id,
+                        Object_Id,
+                        Global_Id,	
+                        CreationDate,	
+                        Creator_Id,	
+                        EditDate,	
+                        Editor_Id
+                           ));
+                }catch(err){
+                    rptinspection_err.push(err);
+                  }
+
     
            
         }
 
-         response = "rptinspection_4";
-
         }else if(worksheetname == "rptform1_5"){
 
             for(let element of data){
-                console.log("started the looping the data into rptform table");
-                console.log("element ", element); 
                 
                     let     Land_Search_Rptform_Id = uuid.v4();
                     let     Parent_Global_Id = element["ParentGlobalID"]; 
@@ -404,52 +394,91 @@ const  handlefiles = async (req,res)=>{
     
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
                       
-                    rptform1_5.push( await rptformtable(
-                        Land_Search_Rptform_Id,	
-                        Parent_Global_Id,	
-                        Object_Id,	
-                        Global_Id,	
-                        CreationDate,	
-                        Creator_Id,	
-                        EditDate,	
-                        Editor_Id
-                           ));
-               
-            //    res.json({
-            //         status:"SUCCESSFULL",
-            //         message:"customaryDemacartionTable updated succesfully",
-            //    })
+                    try{
+                        rptform_response.push( await rptformtable(
+                            Land_Search_Rptform_Id,	
+                            Parent_Global_Id,	
+                            Object_Id,	
+                            Global_Id,	
+                            CreationDate,	
+                            Creator_Id,	
+                            EditDate,	
+                            Editor_Id
+                               ));
+                    }catch(err){
+                        rptform_err.push(err);
+                      }
         
                
             }
     
 
-
-            response = "rptform1_5";
         }else{
-            response = "wrong sheet name";
-        //     res.json({
-        //         status:"failed",
-        //         message:"wrong worksheet names",
-        //    })
-            //console.log("wrong work sheet");
+
+            message = `wrong sheet name : ${worksheetname}`;
+            wrongworksheetname.push(message);
+            console.log("message");
            
         }
 
-        console.log("heyoo i will come last after looping");
     }
- 
+   let response = {
+    cld : {
+        CLD_response,
+        CLD_err 
+    },
+    summary : {
+        summary_response,
+        summary_err 
+    },
+    rptowner : {
+        rptowner_response,
+        rptowner_err 
+    },
+    rptneighbor : {
+        rptneighbor_response,
+        rptneighbor_err 
+    },
+    rptwitness : {
+        rptwitness_response,
+        rptwitness_err 
+    },
+    rptinspection : {
+        rptinspection_response,
+        rptinspection_err 
+    },
+    rptform : {
+        rptform_response,
+        rptform_err 
+    },
+    wrongworksheetname : {
+        wrongworksheetname
+    } 
+   };
+
+   res.json(response);
     console.log("cld response is : ",CLD_response);
-    console.log("rptowner_1 response is : ",rptowner_1);
-    console.log("rptneighbor_2  response is : ",rptneighbor_2 );
-    console.log("rptwitness_3 response is : ",rptwitness_3);
-    console.log("rptinspection_4 response is : ",rptinspection_4);
-    console.log("rptform1_5 response is : ",rptform1_5);
-    
-    
-    //console.log("The response is ",response);
-    console.log("ï come after all for loops a done");
-    console.log("testing");
+    console.log("cld err response is : ",CLD_err);
+
+    console.log("summary_response is : ",summary_response);
+    console.log("summary err response is : ",summary_err);
+
+    console.log("rptowner_1 response is : ",rptowner_response);
+    console.log("rptowner err response is : ",rptowner_err);
+
+    console.log("rptneighbor_2  response is : ",rptneighbor_response );
+    console.log("rptneighbor_err response is : ",rptneighbor_err);
+
+    console.log("rptwitness_3 response is : ",rptwitness_response);
+    console.log("rptwitness_err response is : ",rptwitness_err);
+
+    console.log("rptinspection_4 response is : ",rptinspection_response);
+    console.log("rptinspection_err response is : ",rptinspection_err);
+
+ 
+    console.log("rptform1_5 response is : ",rptform_response);
+    console.log("rptform_err response is : ",rptform_err);
+
 }
 
 module.exports = handlefiles;

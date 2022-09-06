@@ -13,7 +13,21 @@ const rptinspectiontable = (
 )=>{
     let feedback;
     return  new Promise((resolve,reject)=>{
-     
+        query = "select * from rptinspection where Global_Id = ?"; 
+        dbcon.query(query,[Global_Id],(err,result)=>{
+            if(err){
+                feedback = {
+                    status:"failed",
+                    err:err
+                }
+                reject(feedback);
+            }else if(result.length > 0){
+                feedback = {
+                    status:"failed",
+                    err:`duplicate entry in rptinspection table globalid ${Global_Id}`
+                }
+                reject(feedback);
+            }else if(result.length === 0){
                 query = "insert into rptinspection (Land_Search_Rptinspection_Id, Parent_Global_Id, Object_Id, Global_Id, CreationDate, Creator_Id, EditDate, Editor_Id) values(?,?,?,?,?,?,?,?)";
 
                 dbcon.query(query,[
@@ -44,6 +58,11 @@ const rptinspectiontable = (
                          resolve(feedback);
                      }
                  })
+            }
+        })
+
+
+                
 
             }
     )}

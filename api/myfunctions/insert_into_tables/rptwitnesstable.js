@@ -13,7 +13,21 @@ const rptwitnesstable = (
 )=>{
     let feedback;
     return  new Promise((resolve,reject)=>{
-     
+        query = "select * from rptwitness where Global_Id = ?"; 
+        dbcon.query(query,[Global_Id],(err,result)=>{
+            if(err){
+                feedback = {
+                    status:"failed",
+                    err:err
+                }
+                reject(feedback);
+            }else if(result.length > 0){
+                feedback = {
+                    status:"failed",
+                    err:`duplicate entry in rptwitness table globalid ${Global_Id}`
+                }
+                reject(feedback);
+            }else if(result.length === 0){
                 query = "insert into rptwitness (Land_Search_Rptwitness_Id, Parent_Global_Id, Object_Id, Global_Id, Name_Of_The_Witness, CreationDate, Creator_Id, EditDate, Editor_Id) values(?,?,?,?,?,?,?,?,?)";
 
                 dbcon.query(query,[
@@ -46,6 +60,10 @@ const rptwitnesstable = (
                          resolve(feedback);
                      }
                  })
+            }
+        })
+
+              
 
             }
     )}
