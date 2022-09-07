@@ -6,7 +6,7 @@ let gettableid = (req,res,tablename,idcolumn,namecolumn,name)=>{
     //namecolumn is the name of the column having the names we want to check from
     //name is the name we want to check from the name column
     let id;
-    !name ? (name = "not specified") : null ;
+    !name ? (name = "not specified") : name = name.toLowerCase()  ;
  return new Promise((resolve,reject)=>{
      let query = "select * from "+tablename+" where "+namecolumn+" = ?";
         dbcon.query(query,[name],(err,result)=>{

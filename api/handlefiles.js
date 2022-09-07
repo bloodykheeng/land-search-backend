@@ -210,7 +210,10 @@ const  handlefiles = async (req,res)=>{
 
                     let     Marital_Status_Id = await gettableid(req,res,"marital_status","MaritalStatus_Id","MaritalStatus_Type",Marital_Status);
 
-                    let     Address = element["Address"]
+                    let     Address =   element["Address"];
+                    
+                    let Address_Id = await gettableid(req,res,"address","Address_Id","Address_Name",Address);
+
                     let     TelNumber = element["Tel. No. (if any)"]
                     let     Email = element["email (if any)"]
                     let     Id_Nin_Number = element["ID number"]
@@ -234,7 +237,7 @@ const  handlefiles = async (req,res)=>{
                             Gender_Id,	
                             Date_Of_Birth,	
                             Marital_Status_Id,	
-                            Address,	
+                            Address_Id,	
                             TelNumber,	
                             Email,	
                             Id_Nin_Number,	
@@ -422,39 +425,40 @@ const  handlefiles = async (req,res)=>{
         }
 
     }
-   let response = {
+    
+   let response =[{
     cld : {
         CLD_response,
         CLD_err 
-    },
-    summary : {
+    }},
+    {summary : {
         summary_response,
         summary_err 
-    },
-    rptowner : {
+    }},
+    {rptowner : {
         rptowner_response,
         rptowner_err 
-    },
-    rptneighbor : {
+    }},
+    {rptneighbor : {
         rptneighbor_response,
         rptneighbor_err 
-    },
-    rptwitness : {
+    }},
+    {rptwitness : {
         rptwitness_response,
         rptwitness_err 
-    },
-    rptinspection : {
+    }},
+    {rptinspection : {
         rptinspection_response,
         rptinspection_err 
-    },
-    rptform : {
+    }},
+    {rptform : {
         rptform_response,
         rptform_err 
-    },
-    wrongworksheetname : {
+    }},
+    {wrongworksheetname : {
         wrongworksheetname
-    } 
-   };
+    }} 
+   ];
 
    res.json(response);
     console.log("cld response is : ",CLD_response);

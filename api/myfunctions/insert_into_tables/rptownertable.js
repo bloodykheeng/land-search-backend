@@ -11,7 +11,7 @@ const rptownertable = (
     Gender_Id,	
     Date_Of_Birth,	
     Marital_Status_Id,	
-    Address,	
+    Address_Id,	
     TelNumber,	
     Email,	
     Id_Nin_Number,	
@@ -38,7 +38,7 @@ const rptownertable = (
                 reject(feedback);
             }else if(result.length === 0){
 
-                query = "insert into rptowner (Land_Search_RptOwner_Id,Parent_Global_Id, Object_Id, Global_Id, Surname, GivenName, OtherNames,	 Gender_Id,	 Date_Of_Birth,	 Marital_Status_Id,	 Address,	 TelNumber,	 Email,	 Id_Nin_Number,	 CreationDate,	 Creator_Id, EditDate,	Editor_Id) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                query = "insert into rptowner (Land_Search_RptOwner_Id,Parent_Global_Id, Object_Id, Global_Id, Surname, GivenName, OtherNames,	 Gender_Id,	 Date_Of_Birth,	 Marital_Status_Id,	 Address_Id,	 TelNumber,	 Email,	 Id_Nin_Number,	 CreationDate,	 Creator_Id, EditDate,	Editor_Id) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 dbcon.query(query,[
                     Land_Search_RptOwner_Id,
@@ -51,7 +51,7 @@ const rptownertable = (
                     Gender_Id,	
                     Date_Of_Birth,	
                     Marital_Status_Id,	
-                    Address,	
+                    Address_Id,	
                     TelNumber,	
                     Email,	
                     Id_Nin_Number,	
