@@ -1,7 +1,7 @@
 const dbcon = require("../../connection");
 
 
-let getfilestableid = (tablename,idcolumn,namecolumn,name,idkey)=>{
+let getfilestableid = (tablename,idcolumn,namecolumn,name,idkey,req,res)=>{
     //table name is for the table we want to insert data
     //idcolumn is the name having our ids in that table
     //namecolumn is the name of the column having the names we want to check from
@@ -14,7 +14,7 @@ let getfilestableid = (tablename,idcolumn,namecolumn,name,idkey)=>{
             if(err){
                 res.json({
                     status:failed,
-                    error:err
+                    err:err
                 })
                 reject(err);
             }else if(result.length == 0){
@@ -23,7 +23,7 @@ let getfilestableid = (tablename,idcolumn,namecolumn,name,idkey)=>{
                     if(err){
                         res.json({
                             status:"failed",
-                            error:err
+                            err:err
                         });
                         reject(err);
                     }else{
@@ -32,7 +32,7 @@ let getfilestableid = (tablename,idcolumn,namecolumn,name,idkey)=>{
                             if(err){
                                 res.json({
                                     status:failed,
-                                    error:err
+                                    err:err
                                 });
                                 reject(err); 
                             }else if(result.length == 1){

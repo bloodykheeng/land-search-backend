@@ -13,7 +13,7 @@ let gettableid = (req,res,tablename,idcolumn,namecolumn,name)=>{
             if(err){
                 res.json({
                     status:"failed",
-                    error:err
+                    err:err
                 })
                 reject(err);
             }else if(result.length == 0){
@@ -22,7 +22,7 @@ let gettableid = (req,res,tablename,idcolumn,namecolumn,name)=>{
                     if(err){
                         res.json({
                             status:"failed",
-                            error:err
+                            err:err
                         });
                         reject(err);
                     }else{
@@ -31,7 +31,7 @@ let gettableid = (req,res,tablename,idcolumn,namecolumn,name)=>{
                             if(err){
                                 res.json({
                                     status:"failed",
-                                    error:err
+                                    err:err
                                 });
                                 reject(err); 
                             }else if(result.length == 1){

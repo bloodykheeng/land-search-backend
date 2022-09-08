@@ -41,7 +41,7 @@ const rptformtable = (
                      if(err){
                          feedback = {
                             status:"failed",
-                            message:`failed to insert into rptform  table  reason: ${err}`
+                            err:`failed to insert into rptform  table  reason: ${err}`
                        };
                          console.log("error inserting data in rptform table",err);
                          reject(feedback);

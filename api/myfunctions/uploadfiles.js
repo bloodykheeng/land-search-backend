@@ -16,7 +16,7 @@ const uploadfiles = (req,res,next)=>{
                 console.log(err);
                 return res.status(400).json({
                     status:"failed",
-                    message:`failed to move excell file: ${err}`
+                    err:`failed to move excell file: ${err}`
                 })
             }else{
                 zipfile.mv(`./geodatabase_zipfiles/${currentdate}_${zipfile.name}`,err=>{
@@ -24,7 +24,7 @@ const uploadfiles = (req,res,next)=>{
                         console.log(err);
                         return res.status(400).json({
                             status:"failed",
-                            message:`failed to move excell file: ${err}`
+                            err:`failed to move excell file: ${err}`
                         })
                     }else{
                         let filepaths = [`./excel_files/${currentdate}_${excelfile.name}`,`./geodatabase_zipfiles/${currentdate}_${zipfile.name}`];

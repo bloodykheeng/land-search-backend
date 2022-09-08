@@ -418,7 +418,11 @@ const  handlefiles = async (req,res)=>{
 
         }else{
 
-            message = `wrong sheet name : ${worksheetname}`;
+            message ={  
+                    status:"failed",
+                    err:`wrong sheet name : ${worksheetname}`
+                        };
+
             wrongworksheetname.push(message);
             console.log("message");
            

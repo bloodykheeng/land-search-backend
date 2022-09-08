@@ -62,7 +62,7 @@ const rptownertable = (
                      if(err){
                          feedback = {
                             status:"failed",
-                            message:`failed to insert into rptowner table  reason: ${err}`
+                            err:`failed to insert into rptowner table  reason: ${err}`
                        };
                          console.log("error inserting data in rptowner table",err);
                          reject(feedback);

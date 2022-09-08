@@ -8,12 +8,14 @@ const uploadfiles = require("./api/myfunctions/uploadfiles");
 const refreshapi = require("./api/refreshreact");
 const logoutapi = require("./api/logout");
 const handlefiles = require("./api/handlefiles");
+const usersearch = require("./api/usersearch");
 
-router.post("/signup", signupapi.signup)
-router.post("/login", loginapi.login)
-router.post("/logout", verifyjwt, logoutapi.logout)
+router.post("/signup", signupapi.signup);
+router.post("/login", loginapi.login);
+router.post("/logout", verifyjwt, logoutapi.logout);
 router.post("/fileupload",verifyjwt,uploadfiles,handlefiles);
-router.post("/refresh",verifyjwt, refreshapi.refreshreact)
+router.post("/refresh",verifyjwt, refreshapi.refreshreact);
+router.post("/usersearch",usersearch);
 
 
 module.exports = router;

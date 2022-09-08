@@ -35,7 +35,7 @@ const customaryDemacartionTable = (
             if(err){
                 feedback = {
                             status:"failed",
-                            message:`failed to query database reason: ${err}`
+                            err:`failed to query database reason: ${err}`
                        };
                 console.log(err);
                 reject(feedback);
@@ -45,7 +45,7 @@ const customaryDemacartionTable = (
                 let message = "record with clin number: "+ Clin_Number +" already exists ";
                 feedback = {
                     status:"duplicateEntry",
-                    message : message
+                    err : message
                };
                 reject(feedback)
             }else if(result.length == 0){

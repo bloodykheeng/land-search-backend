@@ -45,7 +45,7 @@ const surveySummary = (
                      if(err){
                          feedback = {
                             status:"failed",
-                            message:`failed to insert into survey_summary  reason: ${err}`
+                            err:`failed to insert into survey_summary  reason: ${err}`
                        };
                          console.log("error inserting data in survey_summary : ",err);
                          reject(feedback);
