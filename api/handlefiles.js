@@ -33,7 +33,7 @@ const  handlefiles = async (req,res)=>{
         rptwitness_response = [], rptwitness_err = [], 
         rptinspection_response = [], rptinspection_err = [], 
         rptform_response = [] , rptform_err = [];
-        wrongworksheetname = [];
+        wrongworksheetname = [] , othererrors = [];
 
     console.log("reached handling files ");
 
@@ -51,7 +51,20 @@ const  handlefiles = async (req,res)=>{
     const data = await xlsx.utils.sheet_to_json(worksheet,{raw:false});
 
         if(worksheetname == "Customary_Land_Dermacation__0"){
+            console.log("reached Customary_Land_Dermacation__0");
             for(let element of data){ 
+                //note with hasownproperty checks if a specific column exisists in the json but even though the column exists and has empty data it will return false meaning the column doesnt exist
+            if(element.hasOwnProperty("ObjectID") &&
+            element.hasOwnProperty("GlobalID") &&
+            element.hasOwnProperty("CreationDate") &&
+            element.hasOwnProperty("Creator") &&
+            element.hasOwnProperty("EditDate") &&
+            element.hasOwnProperty("Editor") &&
+            element.hasOwnProperty("CLIN_number") &&
+            element.hasOwnProperty("RecordersName") &&
+            element.hasOwnProperty("regDateAndTime")
+            ){
+                console.log("reached Customary_Land_Dermacation__0 looping");
             let     Global_Id = element["GlobalID"];
             let     Land_Search_Editor_Id = userId; 
             let     Land_Search_RegDate = mydate;
@@ -64,7 +77,7 @@ const  handlefiles = async (req,res)=>{
             let     Clin_Number = element["CLIN_number"];
             let     Object_Id = element["ObjectID"];	
             
-            let     OwnerShipType = element["Ownership Type"].toLowerCase()
+            let     OwnerShipType = element["Ownership Type"];
             let OwnerShipType_id = await gettableid(req,res,"ownershiptype","OwnershipType_Id","OwnershipType_Name",OwnerShipType);
 
             let     Cla_Name = element["CLA Name"];
@@ -72,12 +85,12 @@ const  handlefiles = async (req,res)=>{
             let     Name_Of_The_Community = element["Name of the Community"];
 
             let Region_id , District_Id, County_id, SubCounty_id, Parish_id,Village_id;
-            let     Region = element["Region"].toLowerCase();
-            let     District = element["District"].toLowerCase();	
-            let     County = element["County / Municipality"].toLowerCase();	
-            let     SubCounty = element["Sub-county / Town"].toLowerCase();	
-            let     Parish = element["Parish / Ward"].toLowerCase();	
-            let     Village = element["Village / Zone"].toLowerCase();	
+            let     Region = element["Region"];
+            let     District = element["District"];	
+            let     County = element["County / Municipality"];	
+            let     SubCounty = element["Sub-county / Town"];	
+            let     Parish = element["Parish / Ward"];	
+            let     Village = element["Village / Zone"];	
             
             Region_id = await gettableid(req,res,"regions","Region_Id","Region_Name",Region);
             District_Id = await gettableid(req,res,"districts","District_Id","District_Name",District);
@@ -102,7 +115,9 @@ const  handlefiles = async (req,res)=>{
             Surveyed_Parish = element["surveyed_parish"];
          
             let    Survey_Summary_Id = uuid.v4();
-            console.log(Survey_Summary_Id)
+            console.log(Survey_Summary_Id);
+            
+
             let    Parent_Global_Id = element["GlobalID"];
             let    Date_Of_The_Interview = element["Date of the Interview"];
             let    Interviewed_By = element["Interviewed by"];
@@ -182,14 +197,32 @@ const  handlefiles = async (req,res)=>{
                 summary_err.push(err);
             }
                }
+            }else{
+                console.log("found some wrong column names in customary land ");
+
+                let message ={  
+                    status:"failed",
+                    err:`found some wrong column names in Customary_Land_Dermacation__0 worksheet`
+                        };
+
+                        othererrors.push(message);
+            }
+                
        
     }
 
        }else if(worksheetname == "rptowner_1"){
 
             for(let element of data){
-                 
-                
+
+                if(element.hasOwnProperty("ObjectID") && 
+                element.hasOwnProperty("GlobalID") &&
+                element.hasOwnProperty("ParentGlobalID") &&
+                element.hasOwnProperty("CreationDate") &&
+                element.hasOwnProperty("Creator") &&
+                element.hasOwnProperty("EditDate") &&
+                element.hasOwnProperty("Editor")
+                ){
                     let     Land_Search_RptOwner_Id = uuid.v4();
                     let     Parent_Global_Id = element["ParentGlobalID"]; 
                     let     Object_Id = element["ObjectID"];
@@ -225,6 +258,12 @@ const  handlefiles = async (req,res)=>{
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 
+                    let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
+           
+                    let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
+                    
+                    
+
                       try{
                         rptowner_response.push( await rptownertable(
                             Land_Search_RptOwner_Id,
@@ -244,20 +283,39 @@ const  handlefiles = async (req,res)=>{
                             CreationDate,	
                             Creator_Id,	
                             EditDate,	
-                            Editor_Id
+                            Editor_Id,
+                            userId,	
+                            ExcelFileId,	
+                            GeoShape_Zip_Id,	
+                            mydate
                                ));
                       }catch(err){
                         rptowner_err.push(err);
                       }
-
-               
+                }else{
+                    console.log("found some wrong column names in rptowner_1 ");
+                    let message ={  
+                        status:"failed",
+                        err:`found some wrong column names in rptowner_1 worksheet`
+                            };
+    
+                            othererrors.push(message);
+                }    
             }
 
        }else if(worksheetname == "rptneighbor_2"){
 
             for(let element of data){
               
-                
+                if(element.hasOwnProperty("ObjectID") && 
+                element.hasOwnProperty("GlobalID") &&
+                element.hasOwnProperty("ParentGlobalID") &&
+                element.hasOwnProperty("CreationDate") &&
+                element.hasOwnProperty("Creator") &&
+                element.hasOwnProperty("EditDate") &&
+                element.hasOwnProperty("Editor") 
+                ){
+
                     let     Land_Search_RptNeighbour_Id = uuid.v4();
                     let     Parent_Global_Id = element["ParentGlobalID"]; 
                     let     Object_Id = element["ObjectID"];
@@ -276,6 +334,10 @@ const  handlefiles = async (req,res)=>{
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 
+                    let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
+           
+                    let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
+
                       try{
                         rptneighbor_response.push( await rptneighbortable(
                             Land_Search_RptNeighbour_Id,
@@ -286,7 +348,11 @@ const  handlefiles = async (req,res)=>{
                             CreationDate,
                             Creator_Id,	
                             EditDate,
-                            Editor_Id
+                            Editor_Id,
+                            userId,	
+                            ExcelFileId,	
+                            GeoShape_Zip_Id,	
+                            mydate
                                ));
                       }catch(err){
                         rptneighbor_err.push(err);
@@ -294,12 +360,33 @@ const  handlefiles = async (req,res)=>{
                     
         
                
+                    
+                }else{
+                    console.log("found some wrong column names in rptneighbor_2 ");
+
+                    let message ={  
+                        status:"failed",
+                        err:`found some wrong column names in rptneighbor_2 worksheet`
+                            };
+    
+                            othererrors.push(message);
+                }
+                
+                   
             }
            
         }else if(worksheetname == "rptwitness_3"){
 
             for(let element of data){
-               
+
+                if(element.hasOwnProperty("ObjectID") && 
+                element.hasOwnProperty("GlobalID") &&
+                element.hasOwnProperty("ParentGlobalID") &&
+                element.hasOwnProperty("CreationDate") &&
+                element.hasOwnProperty("Creator") &&
+                element.hasOwnProperty("EditDate") &&
+                element.hasOwnProperty("Editor") 
+                ){
                     let     Land_Search_Rptwitness_Id = uuid.v4();
                     let     Parent_Global_Id = element["ParentGlobalID"]; 
                     let     Object_Id = element["ObjectID"];
@@ -317,6 +404,10 @@ const  handlefiles = async (req,res)=>{
                     let     EditDate = element["EditDate"]
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
+
+                    let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
+           
+                    let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
                       
                     try{
                         rptwitness_response.push( await rptwitnesstable(
@@ -328,20 +419,40 @@ const  handlefiles = async (req,res)=>{
                             CreationDate,	
                             Creator_Id,	
                             EditDate,	
-                            Editor_Id
+                            Editor_Id,
+                            userId,	
+                            ExcelFileId,	
+                            GeoShape_Zip_Id,	
+                            mydate
                                ));
                     }catch(err){
                         rptwitness_err.push(err);
                       }
         
-               
+                }else{
+                    console.log("found some wrong column names in rptwitness_3 ");
+                    let message ={  
+                        status:"failed",
+                        err:`found some wrong column names in rptwitness_3 worksheet`
+                            };
+    
+                            othererrors.push(message);
+                }
+                  
             }
 
        }else if(worksheetname == "rptinspection_4"){
        
          for(let element of data){
-           
-            
+
+            if(element.hasOwnProperty("ObjectID") && 
+            element.hasOwnProperty("GlobalID") &&
+            element.hasOwnProperty("ParentGlobalID") &&
+            element.hasOwnProperty("CreationDate") &&
+            element.hasOwnProperty("Creator") &&
+            element.hasOwnProperty("EditDate") &&
+            element.hasOwnProperty("Editor") 
+            ){
                 let     Land_Search_Rptinspection_Id = uuid.v4();
                 let     Parent_Global_Id = element["ParentGlobalID"]; 
                 let     Object_Id = element["ObjectID"];
@@ -357,6 +468,10 @@ const  handlefiles = async (req,res)=>{
                 let     EditDate = element["EditDate"]
 
                 let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
+
+                let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
+           
+                let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
                 
                 try{
                     rptinspection_response.push( await rptinspectiontable(
@@ -367,12 +482,29 @@ const  handlefiles = async (req,res)=>{
                         CreationDate,	
                         Creator_Id,	
                         EditDate,	
-                        Editor_Id
+                        Editor_Id,
+                        userId,	
+                        ExcelFileId,	
+                        GeoShape_Zip_Id,	
+                        mydate
                            ));
                 }catch(err){
                     rptinspection_err.push(err);
                   }
 
+            }else{
+                console.log("found some wrong column names in rptinspection_4 ");
+
+                let message ={  
+                    status:"failed",
+                    err:`found some wrong column names in rptinspection_4 worksheet`
+                        };
+
+                        othererrors.push(message);
+            }
+           
+            
+               
     
            
         }
@@ -380,7 +512,15 @@ const  handlefiles = async (req,res)=>{
         }else if(worksheetname == "rptform1_5"){
 
             for(let element of data){
-                
+
+                if(element.hasOwnProperty("ObjectID") && 
+                element.hasOwnProperty("GlobalID") &&
+                element.hasOwnProperty("ParentGlobalID") &&
+                element.hasOwnProperty("CreationDate") &&
+                element.hasOwnProperty("Creator") &&
+                element.hasOwnProperty("EditDate") &&
+                element.hasOwnProperty("Editor") 
+                ){
                     let     Land_Search_Rptform_Id = uuid.v4();
                     let     Parent_Global_Id = element["ParentGlobalID"]; 
                     let     Object_Id = element["ObjectID"];
@@ -396,6 +536,10 @@ const  handlefiles = async (req,res)=>{
                     let     EditDate = element["EditDate"]
     
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
+
+                    let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
+           
+                    let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
                       
                     try{
                         rptform_response.push( await rptformtable(
@@ -406,13 +550,29 @@ const  handlefiles = async (req,res)=>{
                             CreationDate,	
                             Creator_Id,	
                             EditDate,	
-                            Editor_Id
+                            Editor_Id,
+                            userId,	
+                            ExcelFileId,	
+                            GeoShape_Zip_Id,	
+                            mydate
                                ));
                     }catch(err){
                         rptform_err.push(err);
                       }
         
                
+                }else{
+                    console.log("found some wrong column names in rptform1_5 ");
+
+                    let message ={  
+                        status:"failed",
+                        err:`found some wrong column names in rptform1_5 worksheet`
+                            };
+    
+                            othererrors.push(message);
+                }
+                
+                   
             }
     
 
@@ -424,7 +584,6 @@ const  handlefiles = async (req,res)=>{
                         };
 
             wrongworksheetname.push(message);
-            console.log("message");
            
         }
 
@@ -461,7 +620,10 @@ const  handlefiles = async (req,res)=>{
     }},
     {wrongworksheetname : {
         wrongworksheetname
-    }} 
+    }},
+    {othererrors : {
+        othererrors
+    }}  
    ];
 
    res.json(response);
@@ -486,6 +648,9 @@ const  handlefiles = async (req,res)=>{
  
     console.log("rptform1_5 response is : ",rptform_response);
     console.log("rptform_err response is : ",rptform_err);
+
+    console.log("other errors: ",othererrors);
+    
 
 }
 

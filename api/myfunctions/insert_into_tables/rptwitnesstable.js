@@ -9,7 +9,11 @@ const rptwitnesstable = (
     CreationDate,	
     Creator_Id,	
     EditDate,	
-    Editor_Id		
+    Editor_Id,
+    Land_Search_Editor_Id,	
+    Excel_File_Id,	
+    GeoShape_Zip_Id,	
+    Land_Search_RegDate		
 )=>{
     let feedback;
     return  new Promise((resolve,reject)=>{
@@ -28,7 +32,7 @@ const rptwitnesstable = (
                 }
                 reject(feedback);
             }else if(result.length === 0){
-                query = "insert into rptwitness (Land_Search_Rptwitness_Id, Parent_Global_Id, Object_Id, Global_Id, Name_Of_The_Witness, CreationDate, Creator_Id, EditDate, Editor_Id) values(?,?,?,?,?,?,?,?,?)";
+                query = "insert into rptwitness (Land_Search_Rptwitness_Id, Parent_Global_Id, Object_Id, Global_Id, Name_Of_The_Witness, CreationDate, Creator_Id, EditDate, Editor_Id, Land_Search_Editor_Id,	 Excel_File_Id,	GeoShape_Zip_Id,	 Land_Search_RegDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 dbcon.query(query,[
                     Land_Search_Rptwitness_Id,
@@ -39,7 +43,12 @@ const rptwitnesstable = (
                     CreationDate,	
                     Creator_Id,	
                     EditDate,	
-                    Editor_Id],(err,result)=>{
+                    Editor_Id,
+                    Land_Search_Editor_Id,	
+                    Excel_File_Id,	
+                    GeoShape_Zip_Id,	
+                    Land_Search_RegDate
+                ],(err,result)=>{
                      if(err){
                          feedback = {
                             status:"failed",

@@ -18,7 +18,11 @@ const rptownertable = (
     CreationDate,	
     Creator_Id,	
     EditDate,	
-    Editor_Id	 
+    Editor_Id,
+    Land_Search_Editor_Id,	
+    Excel_File_Id,	
+    GeoShape_Zip_Id,	
+    Land_Search_RegDate	 
 )=>{
     let feedback;
     return  new Promise((resolve,reject)=>{
@@ -38,7 +42,7 @@ const rptownertable = (
                 reject(feedback);
             }else if(result.length === 0){
 
-                query = "insert into rptowner (Land_Search_RptOwner_Id,Parent_Global_Id, Object_Id, Global_Id, Surname, GivenName, OtherNames,	 Gender_Id,	 Date_Of_Birth,	 Marital_Status_Id,	 Address_Id,	 TelNumber,	 Email,	 Id_Nin_Number,	 CreationDate,	 Creator_Id, EditDate,	Editor_Id) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                query = "insert into rptowner (Land_Search_RptOwner_Id,Parent_Global_Id, Object_Id, Global_Id, Surname, GivenName, OtherNames,	 Gender_Id,	 Date_Of_Birth,	 Marital_Status_Id,	 Address_Id,	 TelNumber,	 Email,	 Id_Nin_Number,	 CreationDate,	 Creator_Id, EditDate,	Editor_Id,Land_Search_Editor_Id, Excel_File_Id, GeoShape_Zip_Id ,Land_Search_RegDate) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
                 dbcon.query(query,[
                     Land_Search_RptOwner_Id,
@@ -58,7 +62,12 @@ const rptownertable = (
                     CreationDate,	
                     Creator_Id,	
                     EditDate,	
-                    Editor_Id	],(err,result)=>{
+                    Editor_Id,
+                    Land_Search_Editor_Id,	
+                    Excel_File_Id,	
+                    GeoShape_Zip_Id,	
+                    Land_Search_RegDate
+                    ],(err,result)=>{
                      if(err){
                          feedback = {
                             status:"failed",
