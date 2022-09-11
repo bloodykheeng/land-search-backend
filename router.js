@@ -9,11 +9,13 @@ const refreshapi = require("./api/refreshreact");
 const logoutapi = require("./api/logout");
 const handlefiles = require("./api/handlefiles");
 const usersearch = require("./api/usersearch");
+const adminsearch = require("./api/adminSearch");
 
 router.post("/signup", signupapi.signup);
 router.post("/login", loginapi.login);
 router.post("/logout", verifyjwt, logoutapi.logout);
 router.post("/fileupload",verifyjwt,uploadfiles,handlefiles);
+router.post("/adminsearch",verifyjwt,adminsearch);
 router.post("/refresh",verifyjwt, refreshapi.refreshreact);
 router.post("/usersearch",usersearch);
 
