@@ -23,7 +23,7 @@ const customaryDemacartionTable = (
     Perimeter_Poly_Km,
     Area_Poly_Ha,
     Land_Use,
-    Easements_Or_Other_Persons_Rights,
+    Easements_Or_Other_Persons_Rights,      
     Value_Per_Acre,
     Year_Of_Evaluation,
     Comments
