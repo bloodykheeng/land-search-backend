@@ -35,14 +35,25 @@ const  handlefiles = async (req,res)=>{
         rptform_response = [] , rptform_err = [];
         wrongworksheetname = [] , othererrors = [];
 
+        const userId = req.admindata.id;
+
     console.log("reached handling files ");
+   //The code below will get the file names and paths from the request variable and insert into into the database accordingly
+    const filesdata = req.filesdata
+     const excelfilepath = filesdata.filepaths[0];
+    const geodatabasezip_filepath = filesdata.filepaths[1];
+    const excelfilename = filesdata.filenames[0];
+    const geodatabasezip_filename = filesdata.filenames[1];
+  
+    
+    try{
 
-    const excelfilepath = req.filepaths[0];
-    const geodatabasezip_filepath = req.filepaths[1];
-    const userId = req.admindata.id;
+        let  ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName","ExcellFileName","Date_Registered","LandSearchRegistrarId",uuid.v4(),excelfilepath,excelfilename,mydate,userId);
+   
+        let   GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName","GeoShapeFileName","	Date_Registered","LandSearchRegistrarId",uuid.v4(),geodatabasezip_filepath,geodatabasezip_filename,mydate,userId); 
 
-    const workbook = await xlsx.readFile(excelfilepath,{dateNF : "dd/mm/yyyy"});
-    const worksheetnames = workbook.SheetNames;
+        const workbook = await xlsx.readFile(excelfilepath,{dateNF : "dd/mm/yyyy"});
+        const worksheetnames = workbook.SheetNames;
    
 
     for (const worksheetname of worksheetnames ){
@@ -68,10 +79,6 @@ const  handlefiles = async (req,res)=>{
             let     Global_Id = element["GlobalID"];
             let     Land_Search_Editor_Id = userId; 
             let     Land_Search_RegDate = mydate;
-           
-            let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
-           
-            let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4()); 
 
             let     Minute_Number = element["Minute number"];
             let     Clin_Number = element["CLIN_number"];
@@ -257,10 +264,6 @@ const  handlefiles = async (req,res)=>{
                     let     EditDate = element["EditDate"]
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
-
-                    let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
-           
-                    let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
                     
                     
 
@@ -334,9 +337,6 @@ const  handlefiles = async (req,res)=>{
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 
-                    let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
-           
-                    let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
 
                       try{
                         rptneighbor_response.push( await rptneighbortable(
@@ -405,9 +405,6 @@ const  handlefiles = async (req,res)=>{
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 
-                    let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
-           
-                    let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
                       
                     try{
                         rptwitness_response.push( await rptwitnesstable(
@@ -469,9 +466,6 @@ const  handlefiles = async (req,res)=>{
 
                 let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 
-                let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
-           
-                let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
                 
                 try{
                     rptinspection_response.push( await rptinspectiontable(
@@ -537,9 +531,6 @@ const  handlefiles = async (req,res)=>{
     
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 
-                    let     ExcelFileId = await getfilestableid("excellfiles","ExcelFiles_Id","FilePathName",excelfilepath,uuid.v4());
-           
-                    let     GeoShape_Zip_Id = await getfilestableid("geoshape_zip_files","GeoShape_Zip_Files_Id","FilePathName",geodatabasezip_filepath,uuid.v4());
                       
                     try{
                         rptform_response.push( await rptformtable(
@@ -588,6 +579,11 @@ const  handlefiles = async (req,res)=>{
         }
 
     }
+    }catch(err){
+        console.log(err);
+    }
+    
+    
     
    let response =[{
     cld : {

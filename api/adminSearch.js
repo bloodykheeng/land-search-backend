@@ -6,8 +6,8 @@ const adminsearch = (req,res)=>{
     let cld, global_id , owner, neighbour, witness , inspection, rptform;
 
         let query = `SELECT cld.* , adminusers.username as landsearchregistrar , 
-        excell.FilePathName as excellfilepath ,
-        geoshape.FilePathName as geoshapefilepath,
+        excell.ExcellFileName as ExcellFileName ,
+        geoshape.GeoShapeFileName as GeoShapeFileName,
         ownership.OwnershipType_Name,
         regions.Region_Name,
         districts.District_Name,
@@ -56,8 +56,8 @@ const adminsearch = (req,res)=>{
                cc.Creator_Name,
                ce.Creator_Name as Editor_Name,
                adminusers.username,
-               excell.FilePathName as excellfilepath ,
-               geoshape.FilePathName as geoshapefilepath
+               excell.ExcellFileName as ExcellFileName ,
+                geoshape.GeoShapeFileName as GeoShapeFileName
                FROM rptowner own 
                               inner join gender on own.Gender_Id = gender.Gender_Id
                               inner join marital_status on marital_status.MaritalStatus_Id = own.Marital_Status_Id
@@ -81,8 +81,8 @@ const adminsearch = (req,res)=>{
                     cc.Creator_Name,
                     ce.Creator_Name as Editor_Name,
                     adminusers.username,
-                    excell.FilePathName as excellfilepath ,
-                    geoshape.FilePathName as geoshapefilepath
+                    excell.ExcellFileName as ExcellFileName ,
+                    geoshape.GeoShapeFileName as GeoShapeFileName
                     FROM rptneighbour neighbour 
                                         inner join creator cc on cc.Creator_Id = neighbour.Creator_Id
                                         inner join creator ce on ce.Creator_Id = neighbour.Editor_Id
@@ -101,8 +101,10 @@ const adminsearch = (req,res)=>{
                     neighbour = result;
                     let query = `SELECT witness.*,
                     cc.Creator_Name,
-                    ce.Creator_Name as Editor_Name,     adminusers.username,                excell.FilePathName as excellfilepath ,
-                                        geoshape.FilePathName as geoshapefilepath
+                    ce.Creator_Name as Editor_Name,     
+                    adminusers.username,                
+                    excell.ExcellFileName as ExcellFileName ,
+                    geoshape.GeoShapeFileName as GeoShapeFileName
                     FROM rptwitness witness 
                                         inner join creator cc on cc.Creator_Id = witness.Creator_Id
                                         inner join creator ce on ce.Creator_Id = witness.Editor_Id
@@ -125,8 +127,8 @@ const adminsearch = (req,res)=>{
                     cc.Creator_Name,
                     ce.Creator_Name as Editor_Name,
                     adminusers.username,
-                    excell.FilePathName as excellfilepath ,
-                    geoshape.FilePathName as geoshapefilepath
+                    excell.ExcellFileName as ExcellFileName ,
+                    geoshape.GeoShapeFileName as GeoShapeFileName
                     FROM rptinspection inspection 
                                         inner join creator cc on cc.Creator_Id = inspection.Creator_Id
                                         inner join creator ce on ce.Creator_Id = inspection.Editor_Id
@@ -148,8 +150,8 @@ const adminsearch = (req,res)=>{
                     cc.Creator_Name,
                     ce.Creator_Name as Editor_Name,
                     adminusers.username,
-                    excell.FilePathName as excellfilepath ,
-                    geoshape.FilePathName as geoshapefilepath
+                    excell.ExcellFileName as ExcellFileName ,
+                    geoshape.GeoShapeFileName as GeoShapeFileName
                     FROM rptform form 
                     inner join creator cc on cc.Creator_Id = form.Creator_Id
                     inner join creator ce on ce.Creator_Id = form.Editor_Id

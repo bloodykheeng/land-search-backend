@@ -1,7 +1,7 @@
 const dbcon = require("../../connection");
 
 
-let getfilestableid = (tablename,idcolumn,namecolumn,name,idkey,req,res)=>{
+let getfilestableid = (tablename,idcolumn,pathcolumn,namecolumn,datecolumn,registrarcolumn,idkey,pathname,filename,mydate,registrarid)=>{
     //table name is for the table we want to insert data
     //idcolumn is the name having our ids in that table
     //namecolumn is the name of the column having the names we want to check from
@@ -10,7 +10,7 @@ let getfilestableid = (tablename,idcolumn,namecolumn,name,idkey,req,res)=>{
     let id;
  return new Promise((resolve,reject)=>{
      let query = "select * from "+tablename+" where "+namecolumn+" = ?";
-        dbcon.query(query,[name],(err,result)=>{
+        dbcon.query(query,[filename],(err,result)=>{
             if(err){
                 res.json({
                     status:failed,
@@ -18,28 +18,23 @@ let getfilestableid = (tablename,idcolumn,namecolumn,name,idkey,req,res)=>{
                 })
                 reject(err);
             }else if(result.length == 0){
-                let query = "insert into "+tablename+" ("+idcolumn+","+namecolumn+",Date_Registered) values(?,?,Now())"
-                dbcon.query(query,[idkey,name],(err,result)=>{
+                let query = "insert into "+tablename+" ("+idcolumn+","+pathcolumn+","+namecolumn+","+datecolumn+","+registrarcolumn+") values(?,?,?,?,?)";
+                dbcon.query(query,[idkey,pathname,filename,mydate,registrarid],(err,result)=>{
                     if(err){
-                        res.json({
-                            status:"failed",
-                            err:err
-                        });
+                        
                         reject(err);
                     }else{
                         let query = "select * from "+tablename+" where "+namecolumn+" = ?";
-                        dbcon.query(query,[name],(err,result)=>{
+                        dbcon.query(query,[filename],(err,result)=>{
                             if(err){
-                                res.json({
-                                    status:failed,
-                                    err:err
-                                });
+                              
                                 reject(err); 
                             }else if(result.length == 1){
                                     id = result[0][idcolumn]
                                      resolve(id);
                                 }else{
-                                    reject(console.log("multiple columns found"));
+                                    let message = "multiple columns found";
+                                    reject(message);
                                 }
                             })
 
@@ -49,7 +44,8 @@ let getfilestableid = (tablename,idcolumn,namecolumn,name,idkey,req,res)=>{
                 id = result[0][idcolumn]
                resolve(id);
             }else{
-                reject(console.log("multiple columns of the same name in database"));
+                let message = "multiple columns of the same name in database";
+                reject(message);
             }
         })
     });

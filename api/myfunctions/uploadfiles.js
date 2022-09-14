@@ -28,7 +28,14 @@ const uploadfiles = (req,res,next)=>{
                         })
                     }else{
                         let filepaths = [`./excel_files/${currentdate}_${excelfile.name}`,`./geodatabase_zipfiles/${currentdate}_${zipfile.name}`];
-                        req.filepaths = filepaths;
+
+                        let filenames = [`${currentdate}_${excelfile.name}`,`${currentdate}_${zipfile.name}`]
+                        
+                        let filesdata = {
+                        filepaths : filepaths,
+                        filenames : filenames
+                      }
+                        req.filesdata = filesdata;
                         console.log("file paths uploaded on request");
                         next();
                         // res.json({
