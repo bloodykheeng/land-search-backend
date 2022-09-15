@@ -3,7 +3,9 @@ const dbcon = require("../connection.js");
 const bcrypt = require("bcrypt");
 
 exports.signup = (req,res)=>{
-    let {firstName, lastName, userName, email, dateOfBirth ,phoneNumber, password} = req.body;
+    let {accounttypeid , firstName, lastName, userName, email, dateOfBirth ,phoneNumber, password} = req.body;
+
+    accounttypeid = accounttypeid.trim();
     firstName = firstName.trim();
     lastName = lastName.trim();
     userName = userName.trim();
@@ -13,7 +15,7 @@ exports.signup = (req,res)=>{
     password = password.trim();
     adminId = uuid.v4();
 
-if(firstName == "" || lastName == "" || userName == "" || email == "" || dateOfBirth == "" || phoneNumber == "" || password == ""){
+if(accounttypeid == "" || firstName == "" || lastName == "" || userName == "" || email == "" || dateOfBirth == "" || phoneNumber == "" || password == ""){
     res.json({
         status:"FAILED",
         message:"some input fields are empty"
@@ -45,9 +47,9 @@ res.json({
                     })
                     }
             else{
-                let query = "select * from adminusers where username = ?"
+                let query = "select * from adminusers where username = ? or email = ?"
 
-                dbcon.query(query,[userName],(err,result)=>{
+                dbcon.query(query,[userName,email],(err,result)=>{
                     if(err){
                         res.json({
                             status:"FAILED",
@@ -57,15 +59,15 @@ res.json({
                     if(result.length > 0 ){
                         res.json({
                             status:"FAILED",
-                            message:"user already exists"
+                            message:"username or email already exists"
                         })
                     }else{
                         //hashing pwd
                         const saltRounds = 10;
                         bcrypt.hash(password,saltRounds)
                         .then((hashedPassword)=>{
-                            query = "insert into adminusers(adminId, firstName, lastName, username, email, dateOfBirth, phoneNumber, password) values (?,?,?,?,?,?,?,?)";
-                        dbcon.query(query,[adminId,firstName,lastName,userName,email,dateOfBirth,phoneNumber,hashedPassword],(err)=>{
+                            query = "insert into adminusers(adminId, firstName, lastName, username, email, dateOfBirth, phoneNumber, password ,AccountTypeId ) values (?,?,?,?,?,?,?,?,?)";
+                        dbcon.query(query,[adminId,firstName,lastName,userName,email,dateOfBirth,phoneNumber,hashedPassword,accounttypeid],(err)=>{
                             if(err){
                                 res.json({
                                     status:"Failed",
