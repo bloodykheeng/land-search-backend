@@ -19,7 +19,7 @@ exports.login = (req,res)=>{
             auth:false
         })
     }else{
-        let query = "select * from adminusers inner join adminaccounttype where username = ?";
+        let query = "select * from adminusers inner join adminaccounttype on adminusers.AccountTypeId = adminaccounttype.AccountTypeId where username = ?";
         dbcon.query(query,[username],(err,data)=>{
             if(err){
                 res.json({
@@ -34,7 +34,7 @@ exports.login = (req,res)=>{
                         message:"user doesnot exist",
                         auth:false
                     });
-                }else{
+                }else if(data.length === 1){
                    
                     const hashedPassword = data[0].password;
                     bcrypt.compare(password,hashedPassword)
@@ -79,6 +79,11 @@ exports.login = (req,res)=>{
                             status:"FAILED",
                             message:"an error occured while comparing passwords " + err.message
                         })
+                    })
+                }else{
+                    res.json({
+                        status:"FAILED",
+                        message:"found that username being used more than once"
                     })
                 }
             }

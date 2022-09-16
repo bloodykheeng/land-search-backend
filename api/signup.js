@@ -4,8 +4,7 @@ const bcrypt = require("bcrypt");
 
 exports.signup = (req,res)=>{
     let {accounttypeid , firstName, lastName, userName, email, dateOfBirth ,phoneNumber, password} = req.body;
-
-    accounttypeid = accounttypeid.trim();
+    accounttypeid = accounttypeid;
     firstName = firstName.trim();
     lastName = lastName.trim();
     userName = userName.trim();
@@ -18,7 +17,7 @@ exports.signup = (req,res)=>{
 if(accounttypeid == "" || firstName == "" || lastName == "" || userName == "" || email == "" || dateOfBirth == "" || phoneNumber == "" || password == ""){
     res.json({
         status:"FAILED",
-        message:"some input fields are empty"
+        message:"some input fields are empty therefore you cannot signup"
     });
 }else if(!/^[a-zA-Z ]*$/.test(firstName)){
 res.json({
@@ -59,7 +58,7 @@ res.json({
                     if(result.length > 0 ){
                         res.json({
                             status:"FAILED",
-                            message:"username or email already exists"
+                            message:"username or email already exists try using another one"
                         })
                     }else{
                         //hashing pwd

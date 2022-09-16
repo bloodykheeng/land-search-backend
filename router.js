@@ -10,6 +10,7 @@ const logoutapi = require("./api/logout");
 const handlefiles = require("./api/handlefiles");
 const usersearch = require("./api/usersearch");
 const adminsearch = require("./api/adminSearch");
+const resetpwd = require("./api/forgotpassword");
 
 router.post("/signup", signupapi.signup);
 router.post("/login", loginapi.login);
@@ -18,6 +19,8 @@ router.post("/fileupload",verifyjwt,uploadfiles,handlefiles);
 router.post("/adminsearch",verifyjwt,adminsearch);
 router.post("/refresh",verifyjwt, refreshapi.refreshreact);
 router.post("/usersearch",usersearch);
+router.post("/fogotpassword",resetpwd.fogotpassword);
+router.post("/resetpassword",resetpwd.resetpassword);
 
 
 module.exports = router;
