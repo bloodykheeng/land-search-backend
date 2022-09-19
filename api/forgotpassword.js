@@ -53,7 +53,7 @@ exports.fogotpassword = (req,res)=>{
                         email,
                         adminid
                     }
-                    const token = jwt.sign(payload,secret,{expiresIn : "1h"});
+                    const token = jwt.sign(payload,secret,{expiresIn : "15m"});
                     //below is the link that shall be sent to the users email
                     // const link = `http://localhost:3000/resetpassword/${adminid}/${token}`;
                     
@@ -84,75 +84,90 @@ exports.fogotpassword = (req,res)=>{
 exports.resetpassword = (req,res)=>{
     
     const {adminid , token, password} = req.body;
-    let query = "select * from adminusers where adminId = ?";
-    
-    dbcon.query(query,[adminid],(err,data)=>{
-        if(err){
-            res.json({
-                status:"failed",
-                message:"failed to query database"
-            });
-            console.log(err);
+    if(!password || !adminid || !password){
+        res.json({
+            status:"failed",
+            message:"some input fields are empty"
+        });
+    }else if(password.length < 8){
+        res.json({
+            status:"failed",
+            message:"password too short! atleast 8 characters"
+        })
         }else{
-            if(data.length < 1){
-                res.json({
-                    status:"failed",
-                    message:"user doesnot exist",
-                });
-            }else if(data.length === 1){
-                
-                let secret = jwtsecret + adminid;
-                console.log("reset password token : ",secret);
-
-                    jwt.verify(token,secret,(err,decoded)=>{
-                        if(err){
-                            res.json({
-                                status:"token-failed",
-                                message:"wrong token",
-                            })
-                           
-                        }else{
+            let query = "select * from adminusers where adminId = ?";
+    
+            dbcon.query(query,[adminid],(err,data)=>{
+                if(err){
+                    res.json({
+                        status:"failed",
+                        message:"failed to query database"
+                    });
+                    console.log(err);
+                }else{
+                    if(data.length < 1){
+                        res.json({
+                            status:"failed",
+                            message:"user doesnot exist",
+                        });
+                    }else if(data.length === 1){
                         
-                            //hashing pwd
-                        const saltRounds = 10;
-                        bcrypt.hash(password,saltRounds)
-                        .then((hashedPassword)=>{
-                            query = "UPDATE adminusers SET password = ? WHERE adminId = ?";
-                        dbcon.query(query,[hashedPassword,adminid],(err)=>{
-                            if(err){
-                                res.json({
-                                    status:"failed",
-                                    message:err.message
-                                })
-                            }else{
-                                res.json({
-                                    status:"successfull",
-                                    message:`password updated successfully`
-                                })
-                            }
-                        })
-                        })
-                        .catch((err)=>{
-                            res.json({
-                                status:"failed",
-                                message:"failed to encrypt password"
-                            })
-                            console.log("bycrypt encryption errors : ",err)
-                        })
-                        
-                    //hashing pwd
-                        }
-                    })
-               
-                
-            }else{
-                res.json({
-                    status:"failed",
-                    message:"more than one user instance please contact land search team",
-                });
-            }
-        }
+                        let secret = jwtsecret + adminid;
+                        console.log("reset password token : ",secret);
         
-    })
+                            jwt.verify(token,secret,(err,decoded)=>{
+                                if(err){
+                                    res.json({
+                                        status:"token-failed",
+                                        message:"wrong token",
+                                    })
+                                   
+                                }else{
+                                
+                                    //hashing pwd
+                                const saltRounds = 10;
+                                bcrypt.hash(password,saltRounds)
+                                .then((hashedPassword)=>{
+                                    query = "UPDATE adminusers SET password = ? WHERE adminId = ?";
+                                dbcon.query(query,[hashedPassword,adminid],(err)=>{
+                                    if(err){
+                                        res.json({
+                                            status:"failed",
+                                            message:err.message
+                                        })
+                                    }else{
+                                        res.json({
+                                            status:"successfull",
+                                            message:`password updated successfully`
+                                        })
+                                    }
+                                })
+                                })
+                                .catch((err)=>{
+                                    res.json({
+                                        status:"failed",
+                                        message:"failed to encrypt password"
+                                    })
+                                    console.log("bycrypt encryption errors : ",err)
+                                })
+                                
+                            //hashing pwd
+                                }
+                            })
+                       
+                        
+                    }else{
+                        res.json({
+                            status:"failed",
+                            message:"more than one user instance please contact land search team",
+                        });
+                    }
+                }
+                
+            })
+        }
+
+
+   
 
 }
