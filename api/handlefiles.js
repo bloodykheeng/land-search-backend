@@ -112,7 +112,7 @@ const  handlefiles = async (req,res)=>{
             let     Land_Use = element["Land Use"];	
             let     Easements_Or_Other_Persons_Rights = element["Easements / Other Persons Rights"];	
             let     Value_Per_Acre = element["Value per Acre"];	
-            let     Year_Of_Evaluation = element["Year of valuation"];
+            let     Year_Of_Evaluation = new Date(element["Year of valuation"]);
             let     Comments = element["Comments"]; 
             
             let Status_Of_Survey, Creator, Editor, Surveyed_Parish;
@@ -126,22 +126,22 @@ const  handlefiles = async (req,res)=>{
             
 
             let    Parent_Global_Id = element["GlobalID"];
-            let    Date_Of_The_Interview = element["Date of the Interview"];
+            let    Date_Of_The_Interview = new Date(element["Date of the Interview"]); 
             let    Interviewed_By = element["Interviewed by"];
             let    Status_Of_Survey_Id = await gettableid(req,res,"status_of_survey","Status_Of_Survey_Id","Status",Status_Of_Survey);
 
             let    Supervision_Notes = element["Supervision Notes"];
             let    Shape_Area = element["Shape__Area"];
             let    Shape_Length = element["Shape__Length"];
-            let    CreationDate = element["CreationDate"];
+            let    CreationDate = new Date(element["CreationDate"]);
             let    Creator_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Creator);
 
-            let    EditDate = element["EditDate"];
+            let    EditDate = new Date(element["EditDate"]);
             let    Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
             let    Surveyed_Parish_Id =  await gettableid(req,res,"parish_or_ward","Parish_Id","parish_Name",Surveyed_Parish);
             let    Instrument_Number = element["Instrument number"];
             let    Recorders_Name = element["RecordersName"];
-            let    regDateAndTime = element["regDateAndTime"];
+            let    regDateAndTime = new Date(element["regDateAndTime"]); 
             let    Land_Search_Registration = mydate;
               
            try{
@@ -246,7 +246,7 @@ const  handlefiles = async (req,res)=>{
 
                     let     Gender_Id = await gettableid(req,res,"gender","Gender_Id","Gender_Type",Gender);
 
-                    let     Date_Of_Birth = element["Date of Birth"]
+                    let     Date_Of_Birth = new Date( element["Date of Birth"]);
 
                     let     Marital_Status_Id = await gettableid(req,res,"marital_status","MaritalStatus_Id","MaritalStatus_Type",Marital_Status);
 
@@ -257,11 +257,11 @@ const  handlefiles = async (req,res)=>{
                     let     TelNumber = element["Tel. No. (if any)"]
                     let     Email = element["email (if any)"]
                     let     Id_Nin_Number = element["ID number"]
-                    let     CreationDate = element["CreationDate"]
+                    let     CreationDate = new Date(element["CreationDate"]); 
 
                     let     Creator_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Creator);
 
-                    let     EditDate = element["EditDate"]
+                    let     EditDate = new Date(element["EditDate"]); 
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
                     
@@ -329,11 +329,11 @@ const  handlefiles = async (req,res)=>{
                     Creator = element["Creator"];
                     Editor = element["Editor"];
 
-                    let     CreationDate = element["CreationDate"]
+                    let     CreationDate = new Date(element["CreationDate"]); 
 
                     let     Creator_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Creator);
 
-                    let     EditDate = element["EditDate"]
+                    let     EditDate = new Date(element["EditDate"]); 
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 
@@ -397,11 +397,11 @@ const  handlefiles = async (req,res)=>{
                     Creator = element["Creator"];
                     Editor = element["Editor"];
 
-                    let     CreationDate = element["CreationDate"]
+                    let     CreationDate = new Date(element["CreationDate"]);
 
                     let     Creator_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Creator);
 
-                    let     EditDate = element["EditDate"]
+                    let     EditDate = new Date(element["EditDate"]); 
 
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 
@@ -454,7 +454,7 @@ const  handlefiles = async (req,res)=>{
                 let     Parent_Global_Id = element["ParentGlobalID"]; 
                 let     Object_Id = element["ObjectID"];
                 let     Global_Id = element["GlobalID"];
-                let     CreationDate = element["CreationDate"];
+                let     CreationDate = new Date(element["CreationDate"]); 
 
                 let  Creator ,  Editor;
                 Creator = element["Creator"];
@@ -462,7 +462,7 @@ const  handlefiles = async (req,res)=>{
 
                 let     Creator_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Creator);
 
-                let     EditDate = element["EditDate"]
+                let     EditDate = new Date(element["EditDate"]);
 
                 let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 
@@ -519,7 +519,7 @@ const  handlefiles = async (req,res)=>{
                     let     Parent_Global_Id = element["ParentGlobalID"]; 
                     let     Object_Id = element["ObjectID"];
                     let     Global_Id = element["GlobalID"];
-                    let     CreationDate = element["CreationDate"];
+                    let     CreationDate = new Date(element["CreationDate"]);
     
                     let  Creator ,  Editor;
                     Creator = element["Creator"];
@@ -527,7 +527,7 @@ const  handlefiles = async (req,res)=>{
     
                     let     Creator_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Creator);
     
-                    let     EditDate = element["EditDate"]
+                    let     EditDate = new Date(element["EditDate"]); 
     
                     let     Editor_Id = await gettableid(req,res,"creator","Creator_Id","Creator_Name",Editor);
 

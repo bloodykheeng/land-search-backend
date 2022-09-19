@@ -13,6 +13,7 @@ exports.signup = (req,res)=>{
     phoneNumber = phoneNumber.trim();
     password = password.trim();
     adminId = uuid.v4();
+    let adminStatus = 1;
 
 if(accounttypeid == "" || firstName == "" || lastName == "" || userName == "" || email == "" || dateOfBirth == "" || phoneNumber == "" || password == ""){
     res.json({
@@ -65,8 +66,8 @@ res.json({
                         const saltRounds = 10;
                         bcrypt.hash(password,saltRounds)
                         .then((hashedPassword)=>{
-                            query = "insert into adminusers(adminId, firstName, lastName, username, email, dateOfBirth, phoneNumber, password ,AccountTypeId ) values (?,?,?,?,?,?,?,?,?)";
-                        dbcon.query(query,[adminId,firstName,lastName,userName,email,dateOfBirth,phoneNumber,hashedPassword,accounttypeid],(err)=>{
+                            query = "insert into adminusers(adminId, firstName, lastName, username, email, dateOfBirth, phoneNumber, password ,AccountTypeId ,adminStatusId ) values (?,?,?,?,?,?,?,?,?,?)";
+                        dbcon.query(query,[adminId,firstName,lastName,userName,email,dateOfBirth,phoneNumber,hashedPassword,accounttypeid,adminStatus],(err)=>{
                             if(err){
                                 res.json({
                                     status:"Failed",
