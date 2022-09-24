@@ -8,13 +8,13 @@ exports.fogotpassword = (req,res)=>{
     let {email} = req.body;
     email = email.trim();
 
-    if(email == ""){
+    if(!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
         res.json({
             status:"FAILED",
             message:"empty credentials",
             auth:false
         })
-    }else if(!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
+    }else if(email){
         res.json({
             status:"FAILED",
             message:"invalid email"
@@ -78,8 +78,9 @@ exports.fogotpassword = (req,res)=>{
             }
             
         })
-    } 
-}
+    }
+} 
+
 
 exports.resetpassword = (req,res)=>{
     
