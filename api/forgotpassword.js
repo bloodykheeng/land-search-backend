@@ -11,13 +11,13 @@ exports.fogotpassword = (req,res)=>{
     if(!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
         res.json({
             status:"FAILED",
-            message:"empty credentials",
+            message:"invalid email",
             auth:false
         })
-    }else if(email){
+    }else if(!email){
         res.json({
             status:"FAILED",
-            message:"invalid email"
+            message:"empty credentials"
         })
     }else{
         let query = "select * from adminusers where email = ?";
