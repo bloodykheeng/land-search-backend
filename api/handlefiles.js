@@ -44,7 +44,6 @@ const  handlefiles = async (req,res)=>{
     const geodatabasezip_filepath = filesdata.filepaths[1];
     const excelfilename = filesdata.filenames[0];
     const geodatabasezip_filename = filesdata.filenames[1];
-  
     
     try{
 

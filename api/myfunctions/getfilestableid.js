@@ -11,6 +11,7 @@ let getfilestableid = (tablename,idcolumn,pathcolumn,namecolumn,datecolumn,regis
  return new Promise((resolve,reject)=>{
      let query = "select * from "+tablename+" where "+namecolumn+" = ?";
         dbcon.query(query,[filename],(err,result)=>{
+            console.log("database result", result);
             if(err){
                 res.json({
                     status:failed,
@@ -44,7 +45,7 @@ let getfilestableid = (tablename,idcolumn,pathcolumn,namecolumn,datecolumn,regis
                 id = result[0][idcolumn]
                resolve(id);
             }else{
-                let message = "multiple columns of the same name in database";
+                let message = "multiple columns of the same name in database getfiletableid.js response";
                 reject(message);
             }
         })
