@@ -18,7 +18,7 @@ const Router = require("./router");
 app.use(
   cors({
     credentials: true,
-    origin: "*",
+    origin: "https://land-search-front-end.vercel.app",
     methods: ["GET", "POST"],
   })
 );
