@@ -8,14 +8,14 @@ const fileupload = require("express-fileupload");
 
 const Router = require("./router");
 
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-  })
-);
-
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: "http://localhost:3000",
+//     methods: ["GET", "POST"],
+//   })
+// );
+app.use(cors());
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(cookieparser());
