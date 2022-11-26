@@ -15,7 +15,13 @@ const Router = require("./router");
 //     methods: ["GET", "POST"],
 //   })
 // );
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "https://land-search-front-end.vercel.app",
+    methods: ["GET", "POST"],
+  })
+);
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(cookieparser());
