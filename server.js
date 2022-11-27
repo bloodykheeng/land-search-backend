@@ -17,7 +17,11 @@ const Router = require("./router");
 // );
 
 app.set("trust proxy", 1);
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+  })
+);
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
