@@ -1,11 +1,24 @@
 const mysql = require("mysql");
+// const dbcon = mysql.createConnection({
+//   host: "10.129.2.155:3306",
+//   user: "root",
+//   password: "",
+//   database: "landsearch",
+// });
+
+// const dbcon = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "",
+//   database: "landsearch",
+// });
 const dbcon = mysql.createConnection({
-  host: "10.129.2.155:3306",
+  host: "containers-us-west-82.railway.app",
+  port: "7025",
   user: "root",
-  password: "",
+  password: "p1Tinbkfd28kt0wXU47MO",
   database: "landsearch",
 });
 module.exports = dbcon;
-// host :"10.129.2.155"
-// port :"3306"
-// // host : "172.30.145.190:3306"
+
+// mysql -hcontainers-us-west-82.railway.app -uroot -p1Tinbkfd28kt0wXU47MO --port 7025 --protocol=TCP railway
