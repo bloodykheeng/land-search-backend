@@ -20,7 +20,6 @@ app.use(
   cors({
     credentials: true,
     origin: "https://land-search-front-end.vercel.app",
-    methods: ["GET", "POST"],
     credentials: true,
   })
 );
