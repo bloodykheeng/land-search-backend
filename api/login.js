@@ -69,6 +69,7 @@ exports.login = (req, res) => {
                     maxAge: 60 * 60 * 1000,
                     sameSite: "none",
                     secure: true,
+                    domain: ".land-search-front-end.vercel.app",
                   });
                   res.json({
                     status: "SUCESSFULL",
