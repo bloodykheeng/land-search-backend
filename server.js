@@ -24,8 +24,9 @@ app.use(
   })
 );
 
-app.use(bodyparser.json());
-app.use(bodyparser.urlencoded({ extended: false }));
+//app.use(bodyparser.json());
+//app.use(bodyparser.urlencoded({ extended: false }));
+app.use(express.json());
 app.use(cookieparser());
 app.use(fileupload());
 app.use("/", Router);
