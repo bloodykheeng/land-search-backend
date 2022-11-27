@@ -1,11 +1,11 @@
-const dbcon = require("../connection");
+const dbcon = require("../connection.js");
 //note the function below will get the clin number from the admin serach
 //then it will query all the tables in order to retrieve data to the admin use
-const adminsearch = (req,res)=>{
-    const {clinnumber} = req.body;
-    let cld, global_id , owner, neighbour, witness , inspection, rptform;
+const adminsearch = (req, res) => {
+  const { clinnumber } = req.body;
+  let cld, global_id, owner, neighbour, witness, inspection, rptform;
 
-        let query = `SELECT cld.* , adminusers.username as landsearchregistrar , 
+  let query = `SELECT cld.* , adminusers.username as landsearchregistrar , 
         excell.ExcellFileName as ExcellFileName ,
         geoshape.GeoShapeFileName as GeoShapeFileName,
         ownership.OwnershipType_Name,
@@ -38,18 +38,18 @@ const adminsearch = (req,res)=>{
                 inner join parish_or_ward pw on ss.Surveyed_Parish_Id = pw.Parish_Id
                 where cld.Clin_Number = ?
         `;
-        dbcon.query(query,[clinnumber],(err,result)=>{
-            if(err){
-                res.json({
-                    status:"failed",
-                    err:err
-                });
-                return
-            }else if(result.length > 0){
-               cld = result;
-               global_id =  result[0]["Global_Id"];
-                
-               let query = `SELECT own.*,
+  dbcon.query(query, [clinnumber], (err, result) => {
+    if (err) {
+      res.json({
+        status: "failed",
+        err: err,
+      });
+      return;
+    } else if (result.length > 0) {
+      cld = result;
+      global_id = result[0]["Global_Id"];
+
+      let query = `SELECT own.*,
                gender.Gender_Type,
                marital_status.MaritalStatus_Type,
                address.Address_Name,
@@ -67,17 +67,17 @@ const adminsearch = (req,res)=>{
                               inner join adminusers on own.Land_Search_Editor_Id = adminusers.adminId
                               inner join excellfiles excell on own.Excel_File_Id = excell.ExcelFiles_Id
                               inner join geoshape_zip_files geoshape on geoshape.GeoShape_Zip_Files_Id = own.GeoShape_Zip_Id
-                              where own.Parent_Global_Id = ?`; 
-               dbcon.query(query,[global_id],(err,result)=>{
-                if(err){
-                    res.json({
-                        status:"failed",
-                        err:err
-                    }); 
-                    return
-                }else{
-                    owner = result;
-                    let query = `SELECT neighbour.*,
+                              where own.Parent_Global_Id = ?`;
+      dbcon.query(query, [global_id], (err, result) => {
+        if (err) {
+          res.json({
+            status: "failed",
+            err: err,
+          });
+          return;
+        } else {
+          owner = result;
+          let query = `SELECT neighbour.*,
                     cc.Creator_Name,
                     ce.Creator_Name as Editor_Name,
                     adminusers.username,
@@ -89,17 +89,17 @@ const adminsearch = (req,res)=>{
                                         inner join adminusers on adminusers.adminId  = neighbour.Land_Search_Editor_Id
                                         inner join excellfiles excell on excell.ExcelFiles_Id = neighbour.Excel_File_Id
                                         inner join geoshape_zip_files geoshape on neighbour.GeoShape_Zip_Id = geoshape.GeoShape_Zip_Files_Id 
-                                        where neighbour.Parent_Global_Id = ?`; 
-               dbcon.query(query,[global_id],(err,result)=>{
-                if(err){
-                    res.json({
-                        status:"failed",
-                        err:err
-                    });
-                    return
-                }else{
-                    neighbour = result;
-                    let query = `SELECT witness.*,
+                                        where neighbour.Parent_Global_Id = ?`;
+          dbcon.query(query, [global_id], (err, result) => {
+            if (err) {
+              res.json({
+                status: "failed",
+                err: err,
+              });
+              return;
+            } else {
+              neighbour = result;
+              let query = `SELECT witness.*,
                     cc.Creator_Name,
                     ce.Creator_Name as Editor_Name,     
                     adminusers.username,                
@@ -111,19 +111,18 @@ const adminsearch = (req,res)=>{
                                         inner join adminusers on adminusers.adminId  = witness.Land_Search_Editor_Id
                                         inner join excellfiles excell on excell.ExcelFiles_Id = witness.Excel_File_Id
                                         inner join geoshape_zip_files geoshape on witness.GeoShape_Zip_Id = geoshape.GeoShape_Zip_Files_Id
-                                        where witness.Parent_Global_Id = ?`; 
-               dbcon.query(query,[global_id],(err,result)=>{
-                if(err){
-                    res.json({
-                        status:"failed",
-                        err:err
-                    }); 
-                    return
-                }else{
-                    
-                    witness = result;
-                    
-                    let query = `SELECT inspection.*, 
+                                        where witness.Parent_Global_Id = ?`;
+              dbcon.query(query, [global_id], (err, result) => {
+                if (err) {
+                  res.json({
+                    status: "failed",
+                    err: err,
+                  });
+                  return;
+                } else {
+                  witness = result;
+
+                  let query = `SELECT inspection.*, 
                     cc.Creator_Name,
                     ce.Creator_Name as Editor_Name,
                     adminusers.username,
@@ -135,18 +134,18 @@ const adminsearch = (req,res)=>{
                                         inner join adminusers on adminusers.adminId  = inspection.Land_Search_Editor_Id
                                         inner join excellfiles excell on excell.ExcelFiles_Id = inspection.Excel_File_Id
                                         inner join geoshape_zip_files geoshape on inspection.GeoShape_Zip_Id = geoshape.GeoShape_Zip_Files_Id
-                                        where inspection.Parent_Global_Id = ?`; 
-               dbcon.query(query,[global_id],(err,result)=>{
-                if(err){
-                    res.json({
-                        status:"failed",
-                        err:err
-                    }); 
-                    return
-                }else{
-                    inspection = result;
-                   
-                    let query = `SELECT form.*, 
+                                        where inspection.Parent_Global_Id = ?`;
+                  dbcon.query(query, [global_id], (err, result) => {
+                    if (err) {
+                      res.json({
+                        status: "failed",
+                        err: err,
+                      });
+                      return;
+                    } else {
+                      inspection = result;
+
+                      let query = `SELECT form.*, 
                     cc.Creator_Name,
                     ce.Creator_Name as Editor_Name,
                     adminusers.username,
@@ -159,57 +158,45 @@ const adminsearch = (req,res)=>{
                     inner join excellfiles excell on excell.ExcelFiles_Id = form.Excel_File_Id
                     inner join geoshape_zip_files geoshape on form.GeoShape_Zip_Id = geoshape.GeoShape_Zip_Files_Id
                                         where form.Parent_Global_Id = ?
-                    `; 
-               dbcon.query(query,[global_id],(err,result)=>{
-                if(err){
-                    res.json({
-                        status:"failed",
-                        err:err
-                    }); 
-                    return
-                }else{
-                    rptform = result;
+                    `;
+                      dbcon.query(query, [global_id], (err, result) => {
+                        if (err) {
+                          res.json({
+                            status: "failed",
+                            err: err,
+                          });
+                          return;
+                        } else {
+                          rptform = result;
 
-                    let response = {
-                        status:"successfull",
-                        cld, 
-                        owner, 
-                        neighbour, 
-                        witness,
-                        inspection,
-                        rptform
+                          let response = {
+                            status: "successfull",
+                            cld,
+                            owner,
+                            neighbour,
+                            witness,
+                            inspection,
+                            rptform,
+                          };
+                          res.json(response);
+                          return;
+                        }
+                      });
                     }
-                    res.json(response);
-                    return
+                  });
                 }
-                    
-            })
-
-                }
-                    
-            })
-                }
-                    
-            })
-    
-                }
-                    
-            })
-    
-                }
-                    
-            })
-
-            }else{
-                res.json({
-                    status:"user not found",
-                    err:"user doesnot exist"
-                });
-                return
+              });
             }
-                
-        })
-   
-  
-}
+          });
+        }
+      });
+    } else {
+      res.json({
+        status: "user not found",
+        err: "user doesnot exist",
+      });
+      return;
+    }
+  });
+};
 module.exports = adminsearch;
