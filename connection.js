@@ -10,7 +10,7 @@ const dbcon = mysql.createConnection({
 });
 dbcon.connect(function (err) {
   if (err) {
-    return console.log("mysql connect error is : ".err.message);
+    return console.log("mysql connect error is : ", err.message);
   }
 
   console.log("connected succesfuly");
