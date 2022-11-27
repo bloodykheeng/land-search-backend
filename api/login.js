@@ -65,8 +65,6 @@ exports.login = (req, res) => {
                     expiresIn: "1h",
                   });
                   res.cookie("cookie-token", token, {
-                    domain: "land-search-front-end.vercel.app",
-                    path: "/adminlogin",
                     httpOnly: true,
                     maxAge: 60 * 60 * 1000,
                     sameSite: "none",
