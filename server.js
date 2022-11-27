@@ -8,21 +8,21 @@ const fileupload = require("express-fileupload");
 
 const Router = require("./router");
 
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: "http://localhost:3000",
-//     methods: ["GET", "POST"],
-//   })
-// );
-
 app.use(
   cors({
     credentials: true,
-    origin: "https://land-search-front-end.vercel.app",
+    origin: "http://localhost:3000",
     methods: ["GET", "POST"],
   })
 );
+
+// app.use(
+//   cors({
+//     credentials: true,
+//     origin: "https://land-search-front-end.vercel.app",
+//     methods: ["GET", "POST"],
+//   })
+// );
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }));

@@ -8,6 +8,13 @@ const dbcon = mysql.createConnection({
   password: DB_PASSWORD,
   database: DB_NAME,
 });
+dbcon.connect(function (err) {
+  if (err) {
+    return console.log("mysql connect error is : ".err.message);
+  }
+
+  console.log("connected succesfuly");
+});
 module.exports = dbcon;
 
 // const dbcon = mysql.createConnection({
