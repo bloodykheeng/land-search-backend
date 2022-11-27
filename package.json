@@ -18,7 +18,7 @@
     "express-fileupload": "^1.4.0",
     "googleapis": "^107.0.0",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "node-datetime": "^2.1.2",
     "nodemailer": "^6.7.8",
     "nodemon": "^2.0.19",
