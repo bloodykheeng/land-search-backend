@@ -17,26 +17,8 @@ const Router = require("./router");
 // );
 
 app.set("trust proxy", 1);
-app.use(
-  cors({
-    origin: "https://land-search-front-end.vercel.app",
-    credentials: true,
-    methods: "GET, POST, PUT, DELETE",
-  })
-);
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header(
-    "Access-Control-Allow-Origin",
-    "https://land-search-front-end.vercel.app"
-  );
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization, X-HTTP-Method-Override, Set-Cookie, Cookie"
-  );
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-  next();
-});
+app.use(cors());
+
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 //app.use(express.json());
