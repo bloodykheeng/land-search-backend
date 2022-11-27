@@ -67,6 +67,8 @@ exports.login = (req, res) => {
                   res.cookie("cookie-token", token, {
                     httpOnly: true,
                     maxAge: 60 * 60 * 1000,
+                    sameSite: "none",
+                    secure: true,
                   });
                   res.json({
                     status: "SUCESSFULL",
