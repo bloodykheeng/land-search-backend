@@ -15,7 +15,7 @@ const Router = require("./router");
 //     methods: ["GET", "POST"],
 //   })
 // );
-
+app.set("trustproxy", 1);
 app.use(
   cors({
     credentials: true,
