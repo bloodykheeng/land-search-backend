@@ -15,18 +15,17 @@ const Router = require("./router");
 //     methods: ["GET", "POST"],
 //   })
 // );
-app.set("trust proxy", 1);
+
 app.use(
   cors({
     credentials: true,
     origin: "https://land-search-front-end.vercel.app",
-    credentials: true,
   })
 );
-
-//app.use(bodyparser.json());
-//app.use(bodyparser.urlencoded({ extended: false }));
-app.use(express.json());
+app.set("trust proxy", 1);
+app.use(bodyparser.json());
+app.use(bodyparser.urlencoded({ extended: true }));
+//app.use(express.json());
 app.use(cookieparser());
 app.use(fileupload());
 app.use("/", Router);

@@ -65,8 +65,6 @@ exports.login = (req, res) => {
                     expiresIn: "1h",
                   });
                   res.cookie("cookie-token", token, {
-                    domain: ".land-search-backend-production.up.railway.app",
-                    httpOnly: true,
                     maxAge: 60 * 60 * 1000,
                     sameSite: "none",
                     secure: true,
