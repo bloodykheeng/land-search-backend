@@ -16,13 +16,7 @@ const Router = require("./router");
 //   })
 // );
 
-app.use(
-  cors({
-    origin: "https://land-search-front-end.vercel.app",
-    credentials: true,
-    methods: "GET, POST, PUT, DELETE",
-  })
-);
+app.use(cors());
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
@@ -30,6 +24,7 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(cookieparser());
 app.use(fileupload());
 app.use("/", Router);
+app.use(express.static("build"));
 
 app.listen(port, () => {
   console.log(`server started on port : ${port}`);
