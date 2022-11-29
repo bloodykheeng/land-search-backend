@@ -23,8 +23,8 @@ app.use(bodyparser.urlencoded({ extended: true }));
 //app.use(express.json());
 app.use(cookieparser());
 app.use(fileupload());
-app.use("/", Router);
-app.use(express.static("build"));
+app.use(express.static(__dirname, "build"));
+app.use(Router);
 
 app.listen(port, () => {
   console.log(`server started on port : ${port}`);
