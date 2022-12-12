@@ -1,4 +1,4 @@
-const express = require("express"); 
+const express = require("express");
 const router = express.Router();
 
 const loginapi = require("./api/login.js");
@@ -12,23 +12,28 @@ const usersearch = require("./api/usersearch");
 const adminsearch = require("./api/adminSearch");
 const resetpwd = require("./api/forgotpassword");
 const adminusers = require("./api/adminusers");
+const transactions = require("./api/gettransactions");
 const updateadminuserstatus = require("./api/updateuserstatus");
+const payments = require("./api/paymenttoken");
+const validateToken = require("./api/validatetoken");
 
+router.post("/transactions", verifyjwt, transactions);
+router.post("/validateToken", validateToken.validateToken);
+router.post("/storepayments", payments.storepayment);
 router.post("/signup", signupapi.signup);
 router.post("/login", loginapi.login);
 router.post("/logout", verifyjwt, logoutapi.logout);
-router.post("/fileupload",verifyjwt,uploadfiles,handlefiles);
+router.post("/fileupload", verifyjwt, uploadfiles, handlefiles);
 //route below enables admin to make search on land
-router.post("/adminsearch",verifyjwt,adminsearch);
+router.post("/adminsearch", verifyjwt, adminsearch);
 //route below fetches admin users
-router.post("/adminusers",verifyjwt,adminusers);
+router.post("/adminusers", verifyjwt, adminusers);
 //this routes updates admin status
-router.post("/updateadminuserstatus",verifyjwt,updateadminuserstatus);
+router.post("/updateadminuserstatus", verifyjwt, updateadminuserstatus);
 //route below checks if we still have a valid token when we refresh the browser
-router.post("/refresh",verifyjwt, refreshapi.refreshreact);
-router.post("/usersearch",usersearch);
-router.post("/fogotpassword",resetpwd.fogotpassword);
-router.post("/resetpassword",resetpwd.resetpassword);
-
+router.post("/refresh", verifyjwt, refreshapi.refreshreact);
+router.post("/usersearch", usersearch);
+router.post("/fogotpassword", resetpwd.fogotpassword);
+router.post("/resetpassword", resetpwd.resetpassword);
 
 module.exports = router;

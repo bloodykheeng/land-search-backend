@@ -1,6 +1,7 @@
 const mysql = require("mysql2");
 let config = require("./config");
 let { DB_HOST, DB_NAME, DB_PASSWORD, DB_USER, DB_PORT } = config;
+
 const dbcon = mysql.createConnection({
   host: DB_HOST,
   port: DB_PORT,

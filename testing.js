@@ -43,36 +43,47 @@
 
 // sendMail().then((result)=>console.log("email sent ... : ",result)).catch((err)=>console.log(err.message));
 
-const bcrypt = require("bcrypt");
-const dbcon = require("./connection.js");
+// const bcrypt = require("bcrypt");
+// const dbcon = require("./connection.js");
 
-const saltRounds = 10;
-const password = "1234567890";
-const adminid = "adfd89d3-fd5e-42f8-86c1-ab38eb4562aa";
-bcrypt
-  .hash(password, saltRounds)
-  .then((hashedPassword) => {
-    query = "UPDATE adminusers SET password = ? WHERE adminId = ?";
-    dbcon.query(query, [hashedPassword, adminid], (err) => {
-      if (err) {
-        // res.json({
-        //   status: "failed",
-        //   message: err.message,
-        // });
-        console.log("error connecting ", err);
-      } else {
-        // res.json({
-        //   status: "successfull",
-        //   message: `password updated successfully`,
-        // });
-        console.log("succesfully updated");
-      }
-    });
-  })
-  .catch((err) => {
-    // res.json({
-    //   status: "failed",
-    //   message: "failed to encrypt password",
-    // });
-    console.log("bycrypt encryption errors : ", err);
-  });
+// const saltRounds = 10;
+// const password = "1234567890";
+// const adminid = "adfd89d3-fd5e-42f8-86c1-ab38eb4562aa";
+// bcrypt
+//   .hash(password, saltRounds)
+//   .then((hashedPassword) => {
+//     query = "UPDATE adminusers SET password = ? WHERE adminId = ?";
+//     dbcon.query(query, [hashedPassword, adminid], (err) => {
+//       if (err) {
+//         // res.json({
+//         //   status: "failed",
+//         //   message: err.message,
+//         // });
+//         console.log("error connecting ", err);
+//       } else {
+//         // res.json({
+//         //   status: "successfull",
+//         //   message: `password updated successfully`,
+//         // });
+//         console.log("succesfully updated");
+//       }
+//     });
+//   })
+//   .catch((err) => {
+//     // res.json({
+//     //   status: "failed",
+//     //   message: "failed to encrypt password",
+//     // });
+//     console.log("bycrypt encryption errors : ", err);
+//   });
+
+let generateToken = () => {
+  let num = "";
+  for (let x = 0; x < 8; x++) {
+    num += Math.floor(Math.random() * 9);
+  }
+  return num;
+};
+
+let result = generateToken();
+console.log(result);
